@@ -6,28 +6,48 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/sn-amber/serve/middleware"
 )
 
-var dir string
-var path string
-var port string
+var (
+	dir           string
+	path          string
+	port          string
+	basicAuthFlag bool
+)
 
 func main() {
 	flag.StringVar(&port, "port", "8080", "port on which to serve")
 	flag.StringVar(&path, "path", "/", "path on which files will be served")
 	flag.StringVar(&dir, "dir", ".", "directory to be served")
+	flag.BoolVar(&basicAuthFlag, "basicauth", false, "turn on basic auth")
 	flag.Parse()
 
 	r := mux.NewRouter()
 
-	// fileserver
 	fs := http.FileServer(http.Dir(dir))
 	if path != "/" {
 		fs = http.StripPrefix(path, fs)
 	}
 
-	r.PathPrefix(path).Handler(fs)
+	switch basicAuthFlag {
+	case true:
+		r.PathPrefix(path).Handler(
+			mw.Chain(fs.ServeHTTP,
+				mw.BasicAuth(),
+				mw.Logging(),
+			),
+		)
+	default:
+		r.PathPrefix(path).Handler(
+			mw.Chain(fs.ServeHTTP,
+				mw.Logging(),
+			),
+		)
+	}
 
 	log.Println("serving", http.Dir(dir), "on localhost:"+port+path)
+
 	http.ListenAndServe(":"+port, r)
+
 }
