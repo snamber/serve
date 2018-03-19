@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/sn-amber/serve/middleware"
+	"github.com/snamber/serve/middleware"
 )
 
 var (
@@ -49,5 +49,4 @@ func main() {
 	log.Println("serving", http.Dir(dir), "on localhost:"+port+path)
 
 	http.ListenAndServe(":"+port, r)
-
 }
