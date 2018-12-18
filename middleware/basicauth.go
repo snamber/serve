@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func BasicAuth() Type {
+func BasicAuth(user, pass string) Type {
 
 	// Create a new Middleware
 	return func(f http.HandlerFunc) http.HandlerFunc {
@@ -36,9 +36,9 @@ func BasicAuth() Type {
 				return
 			}
 
-			if pair[0] != "username" || pair[1] != "password" {
+			if pair[0] != user || pair[1] != pass {
 				http.Error(w, "Not authorized", 401)
-				log.Println("tried with username", pair[0], "and password", pair[1])
+				log.Println("unauthorized access with username", pair[0])
 				return
 			}
 

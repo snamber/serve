@@ -1,6 +1,3 @@
 module github.com/snamber/serve
 
-require (
-	github.com/gorilla/context v0.0.0-20160226214623-1ea25387ff6f // indirect
-	github.com/gorilla/mux v1.6.1
-)
+require github.com/integrii/flaggy v0.0.0-20181007032133-1056ce330646
