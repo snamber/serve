@@ -1,4 +1,4 @@
-package mw
+package middleware
 
 // Leverages nemo's answer in http://stackoverflow.com/a/21937924/556573
 import (

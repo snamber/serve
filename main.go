@@ -28,14 +28,14 @@ func main() {
 	path = addSlashesToPath(path)
 	fs := http.StripPrefix(path, http.FileServer(http.Dir(dir)))
 
-	handleFunc := mw.Chain(fs.ServeHTTP,
-		mw.Logging(),
+	handleFunc := middleware.Chain(fs.ServeHTTP,
+		middleware.Logging(),
 	)
 	if basicAuth != "" {
 		basic := strings.Split(basicAuth, ":")
-		handleFunc = mw.Chain(fs.ServeHTTP,
-			mw.BasicAuth(basic[0], basic[1]),
-			mw.Logging())
+		handleFunc = middleware.Chain(fs.ServeHTTP,
+			middleware.BasicAuth(basic[0], basic[1]),
+			middleware.Logging())
 	}
 
 	http.HandleFunc(path, handleFunc)
